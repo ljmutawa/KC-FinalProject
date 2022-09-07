@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI gameOverText;
     public TextMeshProUGUI restartText;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI muteText;
 
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         NewGame();
+        UpdateHighScoreText();
     }
 
     private void Update()
@@ -86,6 +88,22 @@ public class GameManager : MonoBehaviour
     {
         this.score = score;
         this.scoreText.text = score.ToString();
+
+        CheckHighScore();
+    }
+
+    private void CheckHighScore()
+    {
+        if (score > PlayerPrefs.GetInt("HighScore", 0))
+        {
+            PlayerPrefs.SetInt("HighScore", score);
+            UpdateHighScoreText();
+        }
+    }
+
+    private void UpdateHighScoreText()
+    {
+        this.highScoreText.text = PlayerPrefs.GetInt("HighScore", 0).ToString();
     }
 
     private void SetLives(int lives)
@@ -93,8 +111,6 @@ public class GameManager : MonoBehaviour
         this.lives = lives;
         this.livesText.text = "x" + lives.ToString();
     }
-
-    //following functions are going to be triggered from other scripts
 
     public void GhostEaten(Ghost ghost)
     {
