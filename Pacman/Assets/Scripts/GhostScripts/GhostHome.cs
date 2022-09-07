@@ -9,7 +9,7 @@ public class GhostHome : GhostBehavior
 
     private void OnDisable()
     {
-        if (this.gameObject.activeSelf)
+        if (this.gameObject.activeInHierarchy)
         {
             StartCoroutine(ExitTransition());
         }

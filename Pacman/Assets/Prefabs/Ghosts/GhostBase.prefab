@@ -478,6 +478,7 @@ MonoBehaviour:
   eyes: {fileID: 2692620421096188187}
   blue: {fileID: 5339979955922725709}
   white: {fileID: 2669101636433021792}
+  ghostEatenSound: {fileID: 0}
 --- !u!1 &8207636008152986622
 GameObject:
   m_ObjectHideFlags: 0

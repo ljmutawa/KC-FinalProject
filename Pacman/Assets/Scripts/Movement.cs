@@ -18,10 +18,13 @@ public class Movement : MonoBehaviour
     public Vector2 nextDirection { get; private set; }
     public Vector3 startingPosition { get; private set; }
 
+
     private void Awake()
     {
         this.rigidbody = GetComponent<Rigidbody2D>();
+
         this.startingPosition = this.transform.position;
+
     }
 
     private void Start()
@@ -77,4 +80,6 @@ public class Movement : MonoBehaviour
         RaycastHit2D hit = Physics2D.BoxCast(this.transform.position, Vector2.one * 0.75f, 0.0f, direction, 1.5f, this.obstacleLayer);
         return hit.collider != null;
     }
+
+    
 }

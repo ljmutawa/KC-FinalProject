@@ -20,7 +20,7 @@ public class GhostFrightened : GhostBehavior
         this.blue.enabled = true;
         this.white.enabled = true;
 
-        Invoke(nameof(Flash), duration / 2.0f);
+        Invoke(nameof(Flash), (duration / 2.0f));
     }
 
     public override void Disable()

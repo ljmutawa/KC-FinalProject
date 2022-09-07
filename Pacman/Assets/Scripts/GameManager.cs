@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,13 +9,27 @@ public class GameManager : MonoBehaviour
     public Pacman pacman;
     public Transform pellets;
 
+    public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI restartText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI livesText;
+    public TextMeshProUGUI muteText;
+
+    public AudioSource bgSound;
+    private int numberOfTimesClicked = 0;
+
     public int ghostMultiplier { get; private set; }
     public int score { get; private set; }
     public int lives { get; private set; }
 
+    private void Awake()
+    {
+        this.bgSound = GetComponent<AudioSource>();
+    }
+
     private void Start()
     {
-        NewGame();   
+        NewGame();
     }
 
     private void Update()
@@ -22,7 +37,7 @@ public class GameManager : MonoBehaviour
         if (this.lives <= 0 && Input.GetKeyDown(KeyCode.Return))
         {
             NewGame();
-        }
+        } 
     }
 
     private void NewGame()
@@ -34,7 +49,8 @@ public class GameManager : MonoBehaviour
 
     private void NewRound()
     {
-        //make pacman go back to startingPosition
+        this.gameOverText.enabled = false;
+        this.restartText.enabled = false;
         foreach (Transform pellet in this.pellets)
         {
             pellet.gameObject.SetActive(true);
@@ -56,7 +72,9 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        //add UI ("press any key to restart")
+        this.gameOverText.enabled = true;
+        this.restartText.enabled = true;
+
         for (int i = 0; i < this.ghosts.Length; i++)
         {
             this.ghosts[i].gameObject.SetActive(false);
@@ -66,14 +84,14 @@ public class GameManager : MonoBehaviour
 
     private void SetScore(int score)
     {
-        //add UI
         this.score = score;
+        this.scoreText.text = score.ToString();
     }
 
     private void SetLives(int lives)
     {
-        //add UI
         this.lives = lives;
+        this.livesText.text = "x" + lives.ToString();
     }
 
     //following functions are going to be triggered from other scripts
@@ -87,8 +105,8 @@ public class GameManager : MonoBehaviour
 
     public void PacmanEaten()
     {
-        //add animation?
         this.pacman.gameObject.SetActive(false);
+
         SetLives(this.lives - 1);
         if(this.lives > 0)
         {
@@ -104,11 +122,13 @@ public class GameManager : MonoBehaviour
     {
         pellet.gameObject.SetActive(false);
         SetScore(this.score + pellet.pelletEatenPoints);
+
         if (!HasRemainingPellets())
         {
             this.pacman.gameObject.SetActive(false);
             Invoke(nameof(NewRound), 3.0f);
         }
+
     }
 
     public void PowerPelletEaten(PowerPellet pellet)
@@ -138,5 +158,21 @@ public class GameManager : MonoBehaviour
     private void ResetGhostMultiplier()
     {
         this.ghostMultiplier = 1;
+    }
+
+    public void MuteButton()
+    {
+        this.numberOfTimesClicked += 1;
+
+        if (numberOfTimesClicked % 2 == 0)
+        {
+            this.bgSound.mute = false;
+            this.muteText.text = "Mute";
+        }
+        else if (numberOfTimesClicked % 2 == 1)
+        {
+            this.bgSound.mute = true;
+            this.muteText.text = "Unmute";
+        }
     }
 }
